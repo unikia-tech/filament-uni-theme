@@ -1,0 +1,33 @@
+/* Sidebar dark theme with purple active state */
+.fi-sidebar.fi-main-sidebar {
+    @apply border-r dark:border-gray-800 border-gray-200;
+}
+
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
+    background: linear-gradient(135deg, var(--color-primary-700), var(--color-primary-400));
+    @apply text-white rounded-lg;
+}
+
+.fi-sidebar-item.fi-active .fi-sidebar-item-icon {
+    @apply text-white;
+}
+
+.fi-sidebar-item.fi-active .fi-sidebar-item-label {
+    @apply text-white;
+}
+
+.fi-sidebar-item-btn:hover:not(.fi-active > .fi-sidebar-item-btn) {
+    @apply dark:bg-gray-900 rounded-lg;
+}
+
+/* Remove horizontal scroll from wizard step header */
+.fi-sc-wizard-header {
+    @apply overflow-x-hidden!;
+}
+
+/* Override tenant menu dropdown width - must come after all imports to override inline styles */
+.fi-dropdown.fi-tenant-menu .fi-dropdown-panel,
+.fi-dropdown-panel.fi-scrollable,
+.fi-dropdown-panel[style] {
+    @apply max-w-sm! min-w-xs!;
+}

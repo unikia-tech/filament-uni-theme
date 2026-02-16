@@ -5,6 +5,9 @@ on:
     tags:
       - "**"
 
+permissions:
+  contents: write
+
 jobs:
   # @see https://stackoverflow.com/a/72959712/8179249
   check-current-branch:
@@ -15,7 +18,7 @@ jobs:
 
     steps:
       - name: 🏗 Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -34,7 +37,7 @@ jobs:
 
     steps:
       - name: 🏗 Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 🏗 Get release info
         id: query-release-info

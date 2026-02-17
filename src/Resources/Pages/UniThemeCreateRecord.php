@@ -11,6 +11,6 @@ class UniThemeCreateRecord extends CreateRecord
 
     public function getHeading(): string|Htmlable|null
     {
-        return $this->getCustomHeading();
+        return $this->renderIconHeading();
     }
 }

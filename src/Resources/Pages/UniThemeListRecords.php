@@ -11,6 +11,6 @@ class UniThemeListRecords extends ListRecords
 
     public function getHeading(): string|Htmlable|null
     {
-        return $this->getCustomHeading();
+        return $this->renderIconHeading();
     }
 }

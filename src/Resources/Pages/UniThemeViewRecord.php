@@ -11,6 +11,6 @@ class UniThemeViewRecord extends ViewRecord
 
     public function getHeading(): string|Htmlable|null
     {
-        return $this->getCustomHeading();
+        return $this->renderIconHeading();
     }
 }

@@ -12,8 +12,9 @@ class FilamentUniThemeServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'uni-theme');
 
-        FilamentAsset::register([
-            Js::make('uni-theme', __DIR__ . '/../resources/js/plugin.js'),
-        ]);
+        // Still not working...
+        // FilamentAsset::register([
+        //     Js::make('uni-theme', __DIR__ . '/../resources/js/plugin.js'),
+        // ]);
     }
 }

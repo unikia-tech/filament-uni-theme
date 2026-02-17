@@ -81,6 +81,26 @@ class CreatePost extends UniThemeCreateRecord
 
 Repeat the same pattern for `EditRecord`, `ListRecords`, and `ViewRecord`.
 
+## Manual usage
+
+Implement the trait `Unikia\FilamentUniTheme\Resources\Pages\Concerns\HasCustomHeading` in your page classes.
+
+Add the following code to your page classes:
+
+```php
+use Unikia\FilamentUniTheme\Resources\Pages\Concerns\HasCustomHeading;
+
+class Dashboard extends Page
+{
+    use HasCustomHeading;
+
+    public function getHeading(): string|Htmlable|null
+    {
+        return $this->renderIconHeading(Heroicon::OutlinedHome, 'Dashboard');
+    }
+}
+```
+
 ## What the theme changes
 
 Each UniTheme page class renders a custom heading via the `uni-theme::resource-page-header` Blade view. The heading wraps the resource's navigation icon inside a gradient badge alongside the resource label:

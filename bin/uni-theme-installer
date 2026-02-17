@@ -1,0 +1,101 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * uni-theme-installer
+ *
+ * Installs UniTheme into a Filament project by replacing resource page base
+ * classes with their UniTheme equivalents via Rector (defaults to `app/`).
+ *
+ * Usage:
+ *   vendor/bin/uni-theme-installer [path] [--dry-run]
+ *
+ * Examples:
+ *   vendor/bin/uni-theme-installer
+ *   vendor/bin/uni-theme-installer app/Filament
+ *   vendor/bin/uni-theme-installer app/Filament --dry-run
+ */
+
+$autoloaders = [
+    // Installed as a vendor dependency (standard usage)
+    __DIR__ . '/../../../autoload.php',
+    // Running directly from the package root (development)
+    __DIR__ . '/../vendor/autoload.php',
+];
+
+$autoloaded = false;
+foreach ($autoloaders as $autoloader) {
+    if (file_exists($autoloader)) {
+        require $autoloader;
+        $autoloaded = true;
+        break;
+    }
+}
+
+if (! $autoloaded) {
+    fwrite(STDERR, "Could not find Composer autoloader. Run `composer install` first.\n");
+    exit(1);
+}
+
+// Resolve Rector binary
+$rectorBin = null;
+$rectorCandidates = [
+    __DIR__ . '/../../../bin/rector',
+    __DIR__ . '/../vendor/bin/rector',
+];
+foreach ($rectorCandidates as $candidate) {
+    if (file_exists($candidate)) {
+        $rectorBin = realpath($candidate);
+        break;
+    }
+}
+
+if ($rectorBin === null) {
+    fwrite(STDERR, "Could not find Rector binary. Make sure `rector/rector` is installed.\n");
+    exit(1);
+}
+
+// Resolve the bundled Rector config
+$rectorConfig = realpath(__DIR__ . '/../rector-uni-theme.php');
+
+if ($rectorConfig === false) {
+    fwrite(STDERR, "Could not find rector-uni-theme.php config file.\n");
+    exit(1);
+}
+
+// Parse arguments: first non-flag arg is the target path, rest are forwarded
+$args  = array_slice($argv, 1);
+$path  = null;
+$extra = [];
+
+foreach ($args as $arg) {
+    if (str_starts_with($arg, '-')) {
+        $extra[] = escapeshellarg($arg);
+    } elseif ($path === null) {
+        $path = $arg;
+    }
+}
+
+// Default scan path
+if ($path === null) {
+    $path = 'app';
+}
+
+if (! is_dir($path) && ! is_file($path)) {
+    fwrite(STDERR, "Path not found: {$path}\n");
+    exit(1);
+}
+
+$extraArgs = implode(' ', $extra);
+$command   = sprintf(
+    '%s process %s --config=%s %s',
+    escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg($rectorBin),
+    escapeshellarg($path),
+    escapeshellarg($rectorConfig),
+    $extraArgs
+);
+
+echo "Running: {$command}\n\n";
+
+passthru($command, $exitCode);
+exit($exitCode);
